@@ -1,9 +1,11 @@
 package com.danish.journalApp.controller;
 
+import com.danish.journalApp.cache.AppCache;
 import com.danish.journalApp.entity.User;
 import com.danish.journalApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private AppCache appCache;
 
     @GetMapping("/all-user")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -26,8 +30,14 @@ public class AdminController {
 
     @PostMapping("/create-admin")
     public ResponseEntity<?> createAdmin(@RequestBody User user) {
-        user.setRoles(Arrays.asList("User" ,"ADMIN"));
+        user.setRoles(Arrays.asList("User", "ADMIN"));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.saveAdmin(user);
+    }
+
+    @GetMapping("clear-app-cache")
+    public ResponseEntity<?> clearCache() {
+        appCache.init();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

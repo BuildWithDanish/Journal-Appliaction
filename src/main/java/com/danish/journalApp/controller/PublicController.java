@@ -3,6 +3,7 @@ package com.danish.journalApp.controller;
 import com.danish.journalApp.entity.User;
 import com.danish.journalApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,9 @@ public class PublicController {
     }
 
     @PostMapping("/create-user")
-    public ResponseEntity<?> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@RequestBody User user){
         user.setRoles(Arrays.asList("User"));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userService.save(user);
+        return new ResponseEntity<>(userService.save(user),  HttpStatus.OK);
     }
 }

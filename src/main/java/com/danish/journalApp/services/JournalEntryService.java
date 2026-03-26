@@ -5,15 +5,19 @@ import com.danish.journalApp.entity.User;
 import com.danish.journalApp.repository.JournalEntryRepository;
 import com.danish.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+
+@Service
 public class JournalEntryService {
 
     @Autowired
@@ -23,6 +27,8 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(JournalEntryService.class);
+
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String username) {
         try {
@@ -31,7 +37,6 @@ public class JournalEntryService {
             journalEntryRepository.save(journalEntry);
             user.getJournalEntries().add(journalEntry);
             userRepository.save(user);
-            journalEntryRepository.save(journalEntry);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

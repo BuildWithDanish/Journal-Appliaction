@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoDatabaseFactorySupport;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -21,8 +22,13 @@ public class JournalApplication {
     }
 
     @Bean
-    public PlatformTransactionManager  getTransactionManager(MongoDatabaseFactory mongoDatabaseFactory) {
+    public PlatformTransactionManager getTransactionManager(MongoDatabaseFactory mongoDatabaseFactory) {
         return new MongoTransactionManager(mongoDatabaseFactory);
+    }
+
+    @Bean
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
     }
 
 }

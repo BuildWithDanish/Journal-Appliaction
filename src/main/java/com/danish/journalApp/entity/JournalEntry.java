@@ -16,6 +16,5 @@ public class JournalEntry {
     ObjectId id;
     String title;
     String content;
-
     LocalDateTime date;
 }

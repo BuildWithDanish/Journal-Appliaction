@@ -3,6 +3,9 @@ package com.danish.journalApp.services;
 import com.danish.journalApp.entity.User;
 import com.danish.journalApp.repository.JournalEntryRepository;
 import com.danish.journalApp.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +15,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -27,8 +32,8 @@ public class UserService {
     @Autowired
     public JournalEntryRepository journalEntryRepository;
 
-    public ResponseEntity<List<User>> getAllUsers(){
-        return new ResponseEntity<>(userRepository.findAll(),  HttpStatus.OK);
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> updateUser(User user) {
@@ -45,9 +50,18 @@ public class UserService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<?> save(User user) {
-        userRepository.save(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public User save(User user) {
+        try {
+            User savedUser = userRepository.save(user);
+            return savedUser;
+        } catch (Exception e) {
+            log.error("hahahahha");
+            log.warn("hahahahha");
+            log.trace("hahahahha");
+            log.info("hahahahha");
+            log.debug("hahahahha");
+            throw new RuntimeException(e);
+        }
     }
 
     public ResponseEntity<?> saveAdmin(User user) {
